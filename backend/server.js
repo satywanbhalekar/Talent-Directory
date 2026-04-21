@@ -47,15 +47,16 @@ app.post('/api/talents', async (req, res) => {
 // GET /api/talents
 app.get('/api/talents', async (req, res) => {
   try {
-    if (req.query.skill) {
-      // Filter by skill
-      const talents = await Talent.find({ skills: req.query.skill });
-      res.json(talents);
-    } else {
-      // All talents
-      const talents = await Talent.find();
-      res.json(talents);
-    }
+ const  limit = 2;
+  const  page = req.query.page || 1;
+    const skillFilter = req.query.skill;
+    const totalTalents = await Talent.countDocuments();
+    const totalPages = Math.ceil(totalTalents / limit);
+    const talents = await Talent.find(skillFilter ? { skills: skillFilter } : {})
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .exec();
+    res.json({ talents, totalPages,page, totalTalents });
   } catch (err) {
     res.status(500).json({ error: 'Failed to fetch talents' });
   }

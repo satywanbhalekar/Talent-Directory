@@ -1,19 +1,19 @@
 name: Build Push and Deploy to EKS
 
 on:
-  workflow_dispatch:
+   workflow_dispatch:
   # push:
   #   branches:
   #     - main
-  # workflow_dispatch:
 
 env:
   AWS_REGION: ap-south-1
   EKS_CLUSTER_NAME: b17
   ECR_REGISTRY: 208851973284.dkr.ecr.ap-south-1.amazonaws.com
   ECR_REPOSITORY: b17
-  FRONTEND_IMAGE: 208851973284.dkr.ecr.ap-south-1.amazonaws.com/b17:frontend-latest
-  BACKEND_IMAGE: 208851973284.dkr.ecr.ap-south-1.amazonaws.com/b17:backend-latest
+  IMAGE_TAG: ${{ github.sha }}
+  FRONTEND_IMAGE: 208851973284.dkr.ecr.ap-south-1.amazonaws.com/b17:frontend-${{ github.sha }}
+  BACKEND_IMAGE: 208851973284.dkr.ecr.ap-south-1.amazonaws.com/b17:backend-${{ github.sha }}
   K8S_NAMESPACE: talent-app
 
 jobs:
